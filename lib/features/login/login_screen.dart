@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'login_view_model.dart';
+
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(64.0),
+          child: _Content()
+        )
+      )
+    );
+  }
+}
+
+class _Content extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _Header(),
+        const SizedBox(height: 32),
+        _Form()
+      ],
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+            'Welcome',
+            style: Theme.of(context).textTheme.headlineLarge
+        ),
+        Text(
+            'Please login',
+            style: Theme.of(context).textTheme.bodyMedium
+        ),
+      ]
+    );
+  }
+}
+
+class _Form extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    var viewModel = context.watch<LoginViewModel>();
+
+    return Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+                'Username',
+                style: Theme.of(context).textTheme.bodyLarge
+            ),
+            TextFormField(
+              controller: viewModel.usernameController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter username';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 24),
+            Text(
+                'Password',
+                style: Theme.of(context).textTheme.bodyLarge
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                errorText: viewModel.errorText
+              ),
+              controller: viewModel.passwordController,
+              obscureText: true
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await viewModel.login();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white
+                  ),
+                  child: const Text('LOGIN'),
+                )
+            ),
+          ],
+        )
+    );
+  }
+}
