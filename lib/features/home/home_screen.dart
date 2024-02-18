@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_app/features/home/home_view_model.dart';
 
+import '../shared/error_dialog.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -21,6 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var viewModel = context.watch<HomeViewModel>();
+
+    if (viewModel.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        errorDialog(context, viewModel.error!);
+      });
+    }
 
     return Scaffold(
         body: Center(

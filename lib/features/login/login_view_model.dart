@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../network/login_service.dart';
 import '../../network/network_client/network_client_exceptions.dart';
 import '../../user_session/user_session.dart';
+import '../shared/error_dialog.dart';
 
 class LoginViewModel extends ChangeNotifier {
   LoginViewModel(this._userSession, this._loginService);
@@ -11,6 +12,9 @@ class LoginViewModel extends ChangeNotifier {
 
   String? _errorText;
   String? get errorText => _errorText;
+
+  ViewError? _error;
+  ViewError? get error => _error;
 
   Future<void> login(String username, String password) async {
     if (username.isEmpty || password.isEmpty) {
@@ -30,7 +34,7 @@ class LoginViewModel extends ChangeNotifier {
           break;
 
       default:
-        _errorText = "Unknown network error";
+        _error = ViewError("Error!", "Something unexpected happened!");
       }
 
       notifyListeners();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_app/features/shared/error_dialog.dart';
 
 import 'login_view_model.dart';
 
@@ -59,6 +60,12 @@ class _Form extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var viewModel = context.watch<LoginViewModel>();
+
+    if (viewModel.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        errorDialog(context, viewModel.error!);
+      });
+    }
 
     return Form(
         key: _formKey,
