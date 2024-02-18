@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+import 'package:provider_app/network/items_service.dart';
+import 'package:provider_app/network/login_service.dart';
+import 'package:provider_app/network/network_client.dart';
+import 'package:provider_app/storage/secure_storage.dart';
 import 'package:provider_app/user_session/user_session.dart';
 
+import 'dependency_injection/dependency_injection.dart';
 import 'features/home/home_screen.dart';
+import 'features/home/home_view_model.dart';
 import 'features/login/login_screen.dart';
 import 'features/login/login_view_model.dart';
 
@@ -23,9 +31,9 @@ final _router = GoRouter(
         builder: (context, state) => const HomeScreen()
     ),
   ],
-  refreshListenable: userSession,
+  refreshListenable: _userSession,
   redirect: (context, state) {
-    if (!userSession.isLoggedIn) {
+    if (!_userSession.isLoggedIn) {
       return '/login';
     }
 
@@ -33,7 +41,9 @@ final _router = GoRouter(
   }
 );
 
-final userSession = UserSession();
+final _userSession = UserSession(
+  const SecureStorage(storage: FlutterSecureStorage())
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -42,12 +52,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<LoginViewModel>(
-          create: (context) => LoginViewModel(userSession)
-        ),
-        ChangeNotifierProvider<UserSession>(
-          create: (context) => userSession
-        )
+        ChangeNotifierProvider.value(value: _userSession),
+        ...network,
+        ...viewModels
       ],
       child: MaterialApp.router(
         routerConfig: _router,
@@ -55,5 +62,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 
