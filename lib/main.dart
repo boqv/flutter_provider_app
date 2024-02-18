@@ -68,13 +68,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<SecureStorageType>(
-          create: (context) => const SecureStorage(storage: FlutterSecureStorage()),
-        ),
-        Provider<KeyValueStoreType>(
-          create: (context) => KeyValueStore(_sharedPreferences),
-        ),
-        ChangeNotifierProvider.value(value: _userSession),
+        ...storage(_sharedPreferences),
+        ...userSession(_userSession),
         ...network,
         ...viewModels
       ],
