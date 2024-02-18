@@ -71,7 +71,6 @@ class MyApp extends StatelessWidget {
         ...storage(_sharedPreferences),
         ...userSession(_userSession),
         ...network,
-        ...viewModels
       ],
       child: MaterialApp.router(
         routerConfig: _router,

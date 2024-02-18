@@ -44,19 +44,3 @@ final List<SingleChildWidget> network = [
       create: (context) => ItemsService(context.read<UserSession>(), context.read<NetworkClient>())
   ),
 ];
-
-/* ViewModel dependencies */
-final List<SingleChildWidget> viewModels = [
-  ChangeNotifierProvider<LoginViewModel>(
-      create: (context) => LoginViewModel(
-          context.read<UserSession>(),
-          context.read<LoginService>()
-      )
-  ),
-  ChangeNotifierProvider(
-      create: (context) => HomeViewModel(
-          context.read<UserSession>(),
-          context.read<ItemsService>()
-      )
-  ),
-];

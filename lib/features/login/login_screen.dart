@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_app/features/shared/error_dialog.dart';
+import 'package:provider_app/network/login_service.dart';
+import 'package:provider_app/user_session/user_session.dart';
 
 import 'login_view_model.dart';
 
@@ -9,13 +11,26 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider<LoginViewModel>(
+      create: (context) => LoginViewModel(
+        context.read<UserSession>(),
+        context.read<LoginService>()
+      ),
+      child: _ContentContainer(),
+    );
+  }
+}
+
+class _ContentContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(64.0),
-          child: _Content()
+        body: Center(
+            child: Container(
+                padding: const EdgeInsets.all(64.0),
+                child: _Content()
+            )
         )
-      )
     );
   }
 }
@@ -52,10 +67,21 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _Form extends StatelessWidget {
+class _Form extends StatefulWidget {
+  @override _FormState createState() => _FormState();
+}
+
+class _FormState extends State<_Form> {
   final _formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

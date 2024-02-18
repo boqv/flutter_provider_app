@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_app/features/home/home_view_model.dart';
+import 'package:provider_app/network/items_service.dart';
+import 'package:provider_app/user_session/user_session.dart';
 
 import '../shared/error_dialog.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _HomeScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => HomeViewModel(
+          context.read<UserSession>(),
+          context.read<ItemsService>()
+      ),
+      child: _Content(),
+    );
   }
-}
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    var viewModel = context.read<HomeViewModel>();
-    viewModel.getItems();
 
-    super.initState();
-  }
+
+}
+class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var viewModel = context.watch<HomeViewModel>();
