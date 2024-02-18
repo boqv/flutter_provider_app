@@ -13,7 +13,7 @@ class HomeViewModel extends ChangeNotifier {
   List<String> _items = List.empty();
   List<String> get items => _items;
 
-  String get username => _userSession.username;
+  String? get username => _userSession.username;
 
   Future<void> getItems() async {
     try {

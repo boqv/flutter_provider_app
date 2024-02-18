@@ -1,23 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider_app/storage/secure_storage.dart';
 
+import '../storage/key_value_store.dart';
+
 class UserSession extends ChangeNotifier {
   final SecureStorageType _secureStorage;
+  final KeyValueStoreType _keyValueStore;
 
-  UserSession(this._secureStorage) {
+  UserSession(this._secureStorage, this._keyValueStore) {
     configure();
   }
 
   Future<void> configure() async {
     if (await authenticationToken != null) {
       _state = UserSessionState.loggedIn;
-    }
+      _username = await _keyValueStore.get("username") ?? "";
 
-    notifyListeners();
+      notifyListeners();
+    }
   }
 
-  var _username = '';
-
+  String _username = "";
   String get username => _username;
 
   UserSessionState _state = UserSessionState.loggedOut;
@@ -29,7 +32,7 @@ class UserSession extends ChangeNotifier {
 
   Future<void> login(String username, String token) async {
     await _secureStorage.set("token", token);
-
+    await _keyValueStore.set("username", username);
     _username = username;
     _state = UserSessionState.loggedIn;
 
@@ -42,10 +45,11 @@ class UserSession extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    _username = '';
+    await _keyValueStore.delete("username");
     await _secureStorage.delete("token");
 
     _state = UserSessionState.loggedOut;
+    _username = "";
     notifyListeners();
   }
 }
