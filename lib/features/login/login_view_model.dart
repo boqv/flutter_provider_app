@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../network/login_service.dart';
+import '../../network/network_client/network_client_exceptions.dart';
 import '../../user_session/user_session.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -11,28 +12,28 @@ class LoginViewModel extends ChangeNotifier {
   String? _errorText;
   String? get errorText => _errorText;
 
-  Future<bool> login(String username, String password) async {
+  Future<void> login(String username, String password) async {
     if (username.isEmpty || password.isEmpty) {
       _errorText = "Please provide a username and password";
       notifyListeners();
-      return false;
+      return;
     }
 
     try {
       final token = await _loginService.login(username, password);
+      await _userSession.login(username, token.token);
+    } catch (exception) {
 
-      if (kDebugMode) {
-        print(token.token);
+      switch (exception.runtimeType) {
+        case NetworkClientUnauthorizedException:
+          _errorText = "Wrong username or password";
+          break;
+
+      default:
+        _errorText = "Unknown network error";
       }
 
-      await _userSession.login(username, token.token);
-
-      return true;
-    } catch (exception) {
-      _errorText = exception.toString();
       notifyListeners();
-
-      return false;
     }
   }
 }

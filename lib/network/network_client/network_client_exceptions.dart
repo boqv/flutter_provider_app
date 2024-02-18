@@ -1,0 +1,2 @@
+class NetworkClientUnauthorizedException implements Exception {
+}

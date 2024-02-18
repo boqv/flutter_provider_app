@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../network/items_service.dart';
+import '../../network/network_client/network_client_exceptions.dart';
 import '../../user_session/user_session.dart';
 
 class HomeViewModel extends ChangeNotifier {
@@ -15,13 +16,24 @@ class HomeViewModel extends ChangeNotifier {
   String get username => _userSession.username;
 
   Future<void> getItems() async {
-    var response = await _itemsService.getItems();
-    _items = response.items;
-    notifyListeners();
+    try {
+      var response = await _itemsService.getItems();
+      _items = response.items;
+      notifyListeners();
+    } catch (exception) {
+      switch (exception.runtimeType) {
+        case NetworkClientUnauthorizedException:
+          _userSession.logout();
+          break;
+
+        default:
+          break;
+      }
+    }
   }
 
   Future<void> logout() async {
-    _userSession.logout();
+    await _userSession.logout();
   }
 }
 

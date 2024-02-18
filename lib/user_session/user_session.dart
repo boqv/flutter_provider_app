@@ -34,7 +34,7 @@ class UserSession extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() async {
+  Future<void> logout() async {
     _username = '';
     await _secureStorage.delete("token");
 

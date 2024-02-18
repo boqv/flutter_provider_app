@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:provider_app/network/network_client/network_client_exceptions.dart';
 
-import '../user_session/user_session.dart';
+import '../../user_session/user_session.dart';
 
 class NetworkClient {
   final Map<String, String> _defaultHeaders = {
@@ -23,11 +24,17 @@ class NetworkClient {
       await interceptor.intercept(this);
     }
 
-    return await http.post(
+    final response = await http.post(
       Uri.parse(url),
       headers: _headers,
       body: jsonEncode(body),
     );
+
+    return switch(response.statusCode) {
+      (200) => response,
+      (401) => throw NetworkClientUnauthorizedException(),
+      _ => throw Exception("Unknown network error"),
+    };
   }
 
   Future<http.Response> get(
@@ -40,10 +47,16 @@ class NetworkClient {
       await interceptor.intercept(this);
     }
 
-    return await http.get(
+    final response = await http.get(
       Uri.parse(url),
       headers: _headers,
     );
+
+    return switch(response.statusCode) {
+      (200) => response,
+      (401) => throw NetworkClientUnauthorizedException(),
+      _ => throw Exception("Unknown network error"),
+    };
   }
 
   void addInterceptor(NetworkClientInterceptor interceptor) {

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:provider_app/user_session/user_session.dart';
 
 import '../features/home/home_view_model.dart';
-import 'network_client.dart';
+import 'network_client/network_client.dart';
 
 class ItemsService {
   final UserSession _userSession;
@@ -19,14 +19,6 @@ class ItemsService {
         token
     );
 
-    if (response.statusCode == 200) {
-      return ItemsResponse.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-    }
-
-    if (response.statusCode == 401) {
-      _userSession.logout();
-    }
-
-    throw Exception("Something went wrong");
+    return ItemsResponse.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 }

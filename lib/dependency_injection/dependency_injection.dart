@@ -6,7 +6,7 @@ import '../features/home/home_view_model.dart';
 import '../features/login/login_view_model.dart';
 import '../network/items_service.dart';
 import '../network/login_service.dart';
-import '../network/network_client.dart';
+import '../network/network_client/network_client.dart';
 
 /* Network related dependencies */
 final List<SingleChildWidget> network = [
