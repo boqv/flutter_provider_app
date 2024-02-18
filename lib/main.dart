@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
-import 'package:provider_app/network/items_service.dart';
-import 'package:provider_app/network/login_service.dart';
-import 'package:provider_app/network/network_client.dart';
 import 'package:provider_app/storage/secure_storage.dart';
 import 'package:provider_app/user_session/user_session.dart';
 
 import 'dependency_injection/dependency_injection.dart';
 import 'features/home/home_screen.dart';
-import 'features/home/home_view_model.dart';
 import 'features/login/login_screen.dart';
-import 'features/login/login_view_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +22,7 @@ final _router = GoRouter(
     ),
     GoRoute(
         path: '/home',
-        builder: (context, state) => const HomeScreen()
+        builder: (context, state) => const HomeScreen(),
     ),
   ],
   refreshListenable: _userSession,

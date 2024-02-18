@@ -53,6 +53,8 @@ class _Header extends StatelessWidget {
 
 class _Form extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,7 @@ class _Form extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge
             ),
             TextFormField(
-              controller: viewModel.usernameController,
+              controller: usernameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter username';
@@ -85,7 +87,7 @@ class _Form extends StatelessWidget {
               decoration: InputDecoration(
                 errorText: viewModel.errorText
               ),
-              controller: viewModel.passwordController,
+              controller: passwordController,
               obscureText: true
             ),
             const SizedBox(height: 24),
@@ -93,7 +95,10 @@ class _Form extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await viewModel.login();
+                    await viewModel.login(
+                        usernameController.text,
+                        passwordController.text
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,

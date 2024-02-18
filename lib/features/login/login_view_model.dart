@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:provider_app/storage/secure_storage.dart';
 
 import '../../network/login_service.dart';
 import '../../user_session/user_session.dart';
@@ -11,27 +8,24 @@ class LoginViewModel extends ChangeNotifier {
   final UserSession _userSession;
   final LoginService _loginService;
 
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-
   String? _errorText;
   String? get errorText => _errorText;
 
-  Future<bool> login() async {
-    if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
+  Future<bool> login(String username, String password) async {
+    if (username.isEmpty || password.isEmpty) {
       _errorText = "Please provide a username and password";
       notifyListeners();
       return false;
     }
 
     try {
-      final token = await _loginService.login();
+      final token = await _loginService.login(username, password);
 
       if (kDebugMode) {
         print(token.token);
       }
 
-      await _userSession.login(usernameController.text, token.token);
+      await _userSession.login(username, token.token);
 
       return true;
     } catch (exception) {

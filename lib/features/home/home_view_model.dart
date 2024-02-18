@@ -7,9 +7,7 @@ class HomeViewModel extends ChangeNotifier {
   final UserSession _userSession;
   final ItemsService _itemsService;
 
-  HomeViewModel(this._userSession, this._itemsService) {
-    getItems();
-  }
+  HomeViewModel(this._userSession, this._itemsService);
 
   List<String> _items = List.empty();
   List<String> get items => _items;

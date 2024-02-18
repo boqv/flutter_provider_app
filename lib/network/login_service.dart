@@ -9,10 +9,10 @@ class LoginService {
 
   LoginService(this._networkClient);
 
-  Future<LoginResponse> login() async {
+  Future<LoginResponse> login(String username, String password) async {
     final body = {
-      'username': 'johan',
-      'password': 'pass'
+      'username': username,
+      'password': password
     };
 
     final response = await _networkClient.post('http://0.0.0.0:8080/login', body);
