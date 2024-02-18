@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_app/features/expired_session/expired_session_screen.dart';
 import 'package:provider_app/storage/secure_storage.dart';
 import 'package:provider_app/user_session/user_session.dart';
 
@@ -21,14 +22,22 @@ final _router = GoRouter(
       builder: (context, state) => const LoginScreen()
     ),
     GoRoute(
+      path: '/expired',
+      builder: (context, state) => const ExpiredSessionScreen(),
+    ),
+    GoRoute(
         path: '/home',
         builder: (context, state) => const HomeScreen(),
     ),
   ],
   refreshListenable: _userSession,
   redirect: (context, state) {
-    if (!_userSession.isLoggedIn) {
+    if (_userSession.state == UserSessionState.loggedOut) {
       return '/login';
+    }
+
+    if (_userSession.state == UserSessionState.expired) {
+      return '/expired';
     }
 
     return '/home';

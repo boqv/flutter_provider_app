@@ -9,7 +9,9 @@ class UserSession extends ChangeNotifier {
   }
 
   Future<void> configure() async {
-    _isLoggedIn = await authenticationToken != null;
+    if (await authenticationToken != null) {
+      _state = UserSessionState.loggedIn;
+    }
 
     notifyListeners();
   }
@@ -18,8 +20,8 @@ class UserSession extends ChangeNotifier {
 
   String get username => _username;
 
-  bool _isLoggedIn = false;
-  bool get isLoggedIn => _isLoggedIn;
+  UserSessionState _state = UserSessionState.loggedOut;
+  UserSessionState get state => _state;
 
   Future<String?> get authenticationToken async {
     return await _secureStorage.get("token");
@@ -29,8 +31,13 @@ class UserSession extends ChangeNotifier {
     await _secureStorage.set("token", token);
 
     _username = username;
-    _isLoggedIn = true;
+    _state = UserSessionState.loggedIn;
 
+    notifyListeners();
+  }
+
+  Future<void> sessionExpired() async {
+    _state = UserSessionState.expired;
     notifyListeners();
   }
 
@@ -38,7 +45,13 @@ class UserSession extends ChangeNotifier {
     _username = '';
     await _secureStorage.delete("token");
 
-    _isLoggedIn = false;
+    _state = UserSessionState.loggedOut;
     notifyListeners();
   }
+}
+
+enum UserSessionState {
+  loggedIn,
+  expired,
+  loggedOut
 }

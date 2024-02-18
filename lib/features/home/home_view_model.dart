@@ -23,7 +23,7 @@ class HomeViewModel extends ChangeNotifier {
     } catch (exception) {
       switch (exception.runtimeType) {
         case NetworkClientUnauthorizedException:
-          _userSession.logout();
+          _userSession.sessionExpired();
           break;
 
         default:
