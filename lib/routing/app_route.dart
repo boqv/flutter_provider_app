@@ -12,15 +12,15 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter router(UserSession userSession) => GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: Routes.home,
+    initialLocation: AppRoute.home,
     routes: [
       GoRoute(
-          path: Routes.login,
+          path: AppRoute.login,
           builder: (context, state) => const LoginScreen(),
           parentNavigatorKey: _rootNavigatorKey
       ),
       GoRoute(
-          path: Routes.expired,
+          path: AppRoute.expired,
           builder: (context, state) => const ExpiredSessionScreen(),
           parentNavigatorKey: _rootNavigatorKey
       ),
@@ -31,14 +31,14 @@ GoRouter router(UserSession userSession) => GoRouter(
           },
           routes: [
             GoRoute(
-                path: Routes.home,
+                path: AppRoute.home,
                 builder: (context, state) {
                   return const Text("home!");
                 },
                 parentNavigatorKey: _shellNavigatorKey
             ),
             GoRoute(
-                path: Routes.tools,
+                path: AppRoute.tools,
                 builder: (context, state) {
                   return const Text("tools!");
                 },
@@ -50,15 +50,15 @@ GoRouter router(UserSession userSession) => GoRouter(
     refreshListenable: userSession,
     redirect: (context, state) {
       if (userSession.state == UserSessionState.loggedOut) {
-        return Routes.login;
+        return AppRoute.login;
       }
 
       if (userSession.state == UserSessionState.expired) {
-        return Routes.expired;
+        return AppRoute.expired;
       }
 
-      if (state.matchedLocation == Routes.login) {
-        return Routes.home;
+      if (state.matchedLocation == AppRoute.login) {
+        return AppRoute.home;
       }
     }
 );
