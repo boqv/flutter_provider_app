@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:provider_app/network/network_client/network_client.dart';
 
+import '../config.dart';
 import 'login_response.dart';
 
 class LoginService {
@@ -15,7 +16,7 @@ class LoginService {
       'password': password
     };
 
-    final response = await _networkClient.post('http://0.0.0.0:8080/login', body);
+    final response = await _networkClient.post('${Config.baseUrl}/login', body);
 
     return LoginResponse.fromJson(
         jsonDecode(response.body) as Map<String, dynamic>
