@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_app/features/expired_session/expired_session_screen.dart';
+import 'package:provider_app/routing/router.dart';
 import 'package:provider_app/storage/key_value_store.dart';
 import 'package:provider_app/storage/secure_storage.dart';
 import 'package:provider_app/user_session/user_session.dart';
@@ -31,36 +32,6 @@ Future<void> configureUserSession() async {
 late final UserSession _userSession;
 late final SharedPreferences _sharedPreferences;
 
-final _router = GoRouter(
-    initialLocation: '/home',
-    routes: [
-      GoRoute(
-          path: '/login',
-          builder: (context, state) => const LoginScreen()
-      ),
-      GoRoute(
-        path: '/expired',
-        builder: (context, state) => const ExpiredSessionScreen(),
-      ),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeScreen(),
-      ),
-    ],
-    refreshListenable: _userSession,
-    redirect: (context, state) {
-      if (_userSession.state == UserSessionState.loggedOut) {
-        return '/login';
-      }
-
-      if (_userSession.state == UserSessionState.expired) {
-        return '/expired';
-      }
-
-      return '/home';
-    }
-);
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -73,7 +44,7 @@ class MyApp extends StatelessWidget {
         ...network,
       ],
       child: MaterialApp.router(
-        routerConfig: _router,
+        routerConfig: router(_userSession),
       )
     );
   }

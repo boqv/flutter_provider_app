@@ -27,13 +27,13 @@ class LoginViewModel extends ChangeNotifier {
       final token = await _loginService.login(username, password);
       await _userSession.login(username, token.token);
     } catch (exception) {
-
       switch (exception.runtimeType) {
         case NetworkClientUnauthorizedException:
           _errorText = "Wrong username or password";
           break;
 
       default:
+        print(exception.toString());
         _error = ViewError("Error!", "Something unexpected happened!");
       }
 
