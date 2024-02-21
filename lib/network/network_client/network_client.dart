@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:provider_app/network/network_client/network_client_exceptions.dart';
@@ -6,6 +7,11 @@ import 'package:provider_app/network/network_client/network_client_exceptions.da
 import '../../user_session/user_session.dart';
 
 class NetworkClient {
+  final http.Client client;
+
+  final Duration _timeout = const Duration(seconds: 5);
+
+  NetworkClient(this.client);
   final Map<String, String> _defaultHeaders = {
     'Content-Type': 'application/json; charset=UTF-8',
   };
@@ -24,11 +30,11 @@ class NetworkClient {
       await interceptor.intercept(this);
     }
 
-    final response = await http.post(
+    final response = await client.post(
       Uri.parse(url),
       headers: _headers,
       body: jsonEncode(body),
-    );
+    ).timeout(_timeout);
 
     return switch(response.statusCode) {
       (200) => response,
@@ -50,7 +56,7 @@ class NetworkClient {
     final response = await http.get(
       Uri.parse(url),
       headers: _headers,
-    );
+    ).timeout(_timeout);
 
     return switch(response.statusCode) {
       (200) => response,
@@ -68,7 +74,8 @@ class NetworkClient {
   }
 
   static NetworkClient factory(AuthenticationInterceptor authenticationInterceptor) {
-    var networkClient = NetworkClient();
+    var client = http.Client();
+    var networkClient = NetworkClient(client);
     networkClient.addInterceptor(authenticationInterceptor);
 
     return networkClient;

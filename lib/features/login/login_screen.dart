@@ -38,6 +38,15 @@ class _ContentContainer extends StatelessWidget {
 class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var viewModel = context.watch<LoginViewModel>();
+
+    return viewModel.isLoading ? _Loading() : _LoginContainer();
+  }
+}
+
+class _LoginContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -47,6 +56,7 @@ class _Content extends StatelessWidget {
       ],
     );
   }
+
 }
 
 class _Header extends StatelessWidget {
@@ -65,6 +75,19 @@ class _Header extends StatelessWidget {
       ]
     );
   }
+}
+
+class _Loading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircularProgressIndicator()
+      ],
+    );
+  }
+
 }
 
 class _Form extends StatefulWidget {
