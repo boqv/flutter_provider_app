@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider_app/features/home/news/news_screen.dart';
 import 'package:provider_app/routing/routes.dart';
 
 import '../features/expired_session/expired_session_screen.dart';
@@ -17,12 +18,10 @@ GoRouter router(UserSession userSession) => GoRouter(
       GoRoute(
           path: AppRoute.login,
           builder: (context, state) => const LoginScreen(),
-          parentNavigatorKey: _rootNavigatorKey
       ),
       GoRoute(
           path: AppRoute.expired,
           builder: (context, state) => const ExpiredSessionScreen(),
-          parentNavigatorKey: _rootNavigatorKey
       ),
       ShellRoute(
           navigatorKey: _shellNavigatorKey,
@@ -33,16 +32,20 @@ GoRouter router(UserSession userSession) => GoRouter(
             GoRoute(
                 path: AppRoute.home,
                 builder: (context, state) {
-                  return const Text("home!");
+                  return const Text ("home!");
                 },
-                parentNavigatorKey: _shellNavigatorKey
+            ),
+            GoRoute(
+                path: AppRoute.news,
+                builder: (context, state) {
+                  return const Text ("news!");
+                },
             ),
             GoRoute(
                 path: AppRoute.tools,
                 builder: (context, state) {
                   return const Text("tools!");
                 },
-                parentNavigatorKey: _shellNavigatorKey
             )
           ]
       ),
