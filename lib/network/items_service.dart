@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:provider_app/user_session/user_session.dart';
 
 import '../config.dart';
-import '../features/home/home_view_model.dart';
+import '../features/root/home/home_view_model.dart';
 import 'network_client/network_client.dart';
 
 class ItemsService {

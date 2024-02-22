@@ -1,11 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:provider_app/features/root/root_navigation_state.dart';
 import 'package:provider_app/user_session/user_session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../features/home/home_view_model.dart';
-import '../features/login/login_view_model.dart';
 import '../network/items_service.dart';
 import '../network/login_service.dart';
 import '../network/network_client/network_client.dart';
@@ -43,4 +42,11 @@ final List<SingleChildWidget> network = [
   Provider<ItemsService>(
       create: (context) => ItemsService(context.read<UserSession>(), context.read<NetworkClient>())
   ),
+];
+
+/* Misc dependencies */
+final List <SingleChildWidget> misc = [
+  ChangeNotifierProvider(
+      create: (context) => RootNavigationState()
+  )
 ];
