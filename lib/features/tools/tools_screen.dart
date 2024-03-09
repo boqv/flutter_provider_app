@@ -41,7 +41,7 @@ class ToolsScreen extends StatelessWidget {
             child: const Text('LOGOUT'),
         ),
       ],
-    )
+    ),
     );
   }
 }

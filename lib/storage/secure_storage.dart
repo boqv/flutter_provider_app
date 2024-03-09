@@ -16,7 +16,7 @@ class SecureStorage implements SecureStorageType {
   );
 
   IOSOptions get _iOptions => const IOSOptions(
-      accessibility: KeychainAccessibility.first_unlock
+      accessibility: KeychainAccessibility.first_unlock,
   );
 
   @override

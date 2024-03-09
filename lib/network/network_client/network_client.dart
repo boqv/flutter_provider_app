@@ -1,10 +1,12 @@
+// ignore_for_file: unused_import
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:provider_app/network/network_client/network_client_exceptions.dart';
 
-import '../../user_session/user_session.dart';
+import 'package:provider_app/user_session/user_session.dart';
 
 class NetworkClient {
   final http.Client client;
@@ -22,11 +24,11 @@ class NetworkClient {
 
   Future<http.Response> post(
       String url,
-      Map<String, dynamic> body
+      Map<String, dynamic> body,
   ) async {
     _headers = _defaultHeaders;
 
-    for (var interceptor in _interceptors) {
+    for (final interceptor in _interceptors) {
       await interceptor.intercept(this);
     }
 
@@ -45,11 +47,11 @@ class NetworkClient {
 
   Future<http.Response> get(
       String url,
-      String? bearerToken
+      String? bearerToken,
   ) async {
     _headers = _defaultHeaders;
 
-    for (var interceptor in _interceptors) {
+    for (final interceptor in _interceptors) {
       await interceptor.intercept(this);
     }
 
@@ -74,8 +76,8 @@ class NetworkClient {
   }
 
   static NetworkClient factory(AuthenticationInterceptor authenticationInterceptor) {
-    var client = http.Client();
-    var networkClient = NetworkClient(client);
+    final client = http.Client();
+    final networkClient = NetworkClient(client);
     networkClient.addInterceptor(authenticationInterceptor);
 
     return networkClient;
@@ -93,10 +95,10 @@ class AuthenticationInterceptor implements NetworkClientInterceptor {
 
   @override
   Future<void> intercept(NetworkClient client) async {
-    var token = await _userSession.authenticationToken;
+    final token = await _userSession.authenticationToken;
 
     client.addHeader(
-      { 'Authorization': 'Bearer $token' }
+      { 'Authorization': 'Bearer $token' },
     );
   }
 }
