@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../user_session/user_session.dart';
+import 'package:provider_app/user_session/user_session.dart';
 
 class ExpiredSessionScreen extends StatelessWidget {
-  const ExpiredSessionScreen({Key? key}) : super(key: key);
+  const ExpiredSessionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var userSession = context.read<UserSession>();
+    final userSession = context.read<UserSession>();
 
     return Scaffold(
       body: Center(
@@ -21,12 +21,12 @@ class ExpiredSessionScreen extends StatelessWidget {
                   onPressed: () {
                     userSession.logout();
                   },
-                  child: const Text('LOGIN')
-              )
-            ]
-          )
-        )
-      )
+                  child: const Text('LOGIN'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

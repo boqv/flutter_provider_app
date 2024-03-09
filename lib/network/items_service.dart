@@ -1,23 +1,27 @@
 import 'dart:convert';
 
+import 'package:provider_app/config.dart';
+import 'package:provider_app/features/root/home/home_view_model.dart';
+import 'package:provider_app/network/network_client/network_client.dart';
 import 'package:provider_app/user_session/user_session.dart';
 
-import '../config.dart';
-import '../features/root/home/home_view_model.dart';
-import 'network_client/network_client.dart';
+abstract class ItemsServiceType {
+  Future<ItemsResponse> getItems();
+}
 
-class ItemsService {
+class ItemsService implements ItemsServiceType {
   final UserSession _userSession;
   final NetworkClient _networkClient;
 
   ItemsService(this._userSession, this._networkClient);
 
+  @override
   Future<ItemsResponse> getItems() async {
-    var token = await _userSession.authenticationToken;
+    final token = await _userSession.authenticationToken;
 
-    var response = await _networkClient.get(
+    final response = await _networkClient.get(
         '${Config.baseUrl}/items',
-        token
+        token,
     );
 
     return ItemsResponse.fromJson(jsonDecode(response.body) as Map<String, dynamic>);

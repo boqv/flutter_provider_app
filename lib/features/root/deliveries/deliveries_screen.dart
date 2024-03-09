@@ -12,10 +12,9 @@ class DeliveriesScreen extends StatelessWidget {
           width: double.infinity,
           height: 140,
           decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background
+              color: Theme.of(context).colorScheme.background,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -25,11 +24,11 @@ class DeliveriesScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 "If we don't have it, it probably doesn't exist",
-                style: Theme.of(context).textTheme.labelLarge
-              )
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

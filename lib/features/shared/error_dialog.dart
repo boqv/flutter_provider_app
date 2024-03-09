@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Future<void> errorDialog(
     BuildContext context,
-    ViewError error
+    ViewError error,
 ) {
   return showDialog(
       context: context,
@@ -22,7 +22,7 @@ Future<void> errorDialog(
             ),
           ],
         );
-      }
+      },
   );
 }
 
@@ -31,4 +31,14 @@ class ViewError {
 
   final String title;
   final String message;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ViewError &&
+        other.title == title &&
+        other.message == message;
+  }
+
+  @override
+  int get hashCode => Object.hash(title, message);
 }

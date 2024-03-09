@@ -1,16 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-
-import '../../network/login_service.dart';
-import '../../network/network_client/network_client_exceptions.dart';
-import '../../user_session/user_session.dart';
-import '../shared/error_dialog.dart';
+import 'package:provider_app/features/shared/error_dialog.dart';
+import 'package:provider_app/network/login_service.dart';
+import 'package:provider_app/network/network_client/network_client_exceptions.dart';
+import 'package:provider_app/user_session/user_session.dart';
 
 class LoginViewModel extends ChangeNotifier {
   LoginViewModel(this._userSession, this._loginService);
-  final UserSession _userSession;
-  final LoginService _loginService;
+  final UserSessionType _userSession;
+  final LoginServiceType _loginService;
 
   String? _errorText;
   String? get errorText => _errorText;
@@ -40,16 +39,13 @@ class LoginViewModel extends ChangeNotifier {
       _isLoading = false;
 
       switch (exception.runtimeType) {
-        case NetworkClientUnauthorizedException:
+        case const (NetworkClientUnauthorizedException):
           _errorText = "Wrong username or password";
-          break;
 
-        case TimeoutException:
+        case const (TimeoutException):
           _error = ViewError("Network error", "Request timed out.");
-          break;
 
       default:
-        print(exception.toString());
         _error = ViewError("Network error", "Something unexpected happened!");
       }
 

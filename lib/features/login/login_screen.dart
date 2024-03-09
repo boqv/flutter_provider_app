@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_app/features/login/login_view_model.dart';
 import 'package:provider_app/features/shared/error_dialog.dart';
 import 'package:provider_app/network/login_service.dart';
 import 'package:provider_app/user_session/user_session.dart';
-
-import 'login_view_model.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -14,7 +13,7 @@ class LoginScreen extends StatelessWidget {
     return ChangeNotifierProvider<LoginViewModel>(
       create: (context) => LoginViewModel(
         context.read<UserSession>(),
-        context.read<LoginService>()
+        context.read<LoginService>(),
       ),
       child: _ContentContainer(),
     );
@@ -28,9 +27,9 @@ class _ContentContainer extends StatelessWidget {
         body: Center(
             child: Container(
                 padding: const EdgeInsets.all(64.0),
-                child: _Content()
-            )
-        )
+                child: _Content(),
+            ),
+        ),
     );
   }
 }
@@ -38,7 +37,7 @@ class _ContentContainer extends StatelessWidget {
 class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var viewModel = context.watch<LoginViewModel>();
+    final viewModel = context.watch<LoginViewModel>();
 
     return viewModel.isLoading ? _Loading() : _LoginContainer();
   }
@@ -52,7 +51,7 @@ class _LoginContainer extends StatelessWidget {
       children: [
         _Header(),
         const SizedBox(height: 32),
-        _Form()
+        _Form(),
       ],
     );
   }
@@ -66,13 +65,13 @@ class _Header extends StatelessWidget {
       children: [
         Text(
             'Welcome',
-            style: Theme.of(context).textTheme.headlineLarge
+            style: Theme.of(context).textTheme.headlineLarge,
         ),
         Text(
             'Please login',
-            style: Theme.of(context).textTheme.bodyMedium
+            style: Theme.of(context).textTheme.bodyMedium,
         ),
-      ]
+      ],
     );
   }
 }
@@ -83,7 +82,7 @@ class _Loading extends StatelessWidget {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircularProgressIndicator()
+        CircularProgressIndicator(),
       ],
     );
   }
@@ -108,7 +107,7 @@ class _FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
-    var viewModel = context.watch<LoginViewModel>();
+    final viewModel = context.watch<LoginViewModel>();
 
     if (viewModel.error != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -123,7 +122,7 @@ class _FormState extends State<_Form> {
           children: [
             Text(
                 'Username',
-                style: Theme.of(context).textTheme.bodyLarge
+                style: Theme.of(context).textTheme.bodyLarge,
             ),
             TextFormField(
               controller: usernameController,
@@ -137,14 +136,14 @@ class _FormState extends State<_Form> {
             const SizedBox(height: 24),
             Text(
                 'Password',
-                style: Theme.of(context).textTheme.bodyLarge
+                style: Theme.of(context).textTheme.bodyLarge,
             ),
             TextFormField(
               decoration: InputDecoration(
-                errorText: viewModel.errorText
+                errorText: viewModel.errorText,
               ),
               controller: passwordController,
-              obscureText: true
+              obscureText: true,
             ),
             const SizedBox(height: 24),
             SizedBox(
@@ -153,18 +152,18 @@ class _FormState extends State<_Form> {
                   onPressed: () async {
                     await viewModel.login(
                         usernameController.text,
-                        passwordController.text
+                        passwordController.text,
                     );
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.white
+                      foregroundColor: Colors.white,
                   ),
                   child: const Text('LOGIN'),
-                )
+                ),
             ),
           ],
-        )
+        ),
     );
   }
 }

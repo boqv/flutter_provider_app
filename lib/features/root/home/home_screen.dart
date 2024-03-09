@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_app/features/root/home/home_view_model.dart';
+import 'package:provider_app/features/shared/error_dialog.dart';
 import 'package:provider_app/network/items_service.dart';
 import 'package:provider_app/user_session/user_session.dart';
-
-import '../../shared/error_dialog.dart';
-import 'home_view_model.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -15,7 +14,7 @@ class HomeScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => HomeViewModel(
           context.read<UserSession>(),
-          context.read<ItemsService>()
+          context.read<ItemsService>(),
       ),
       child: _Content(),
     );
@@ -26,7 +25,7 @@ class HomeScreen extends StatelessWidget {
 class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var viewModel = context.watch<HomeViewModel>();
+    final viewModel = context.watch<HomeViewModel>();
 
     if (viewModel.error != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -41,10 +40,9 @@ class _Content extends StatelessWidget {
           width: double.infinity,
           height: 140,
           decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background
+              color: Theme.of(context).colorScheme.background,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -54,7 +52,7 @@ class _Content extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                   "This page fetches stuff!",
-                  style: Theme.of(context).textTheme.labelLarge
+                  style: Theme.of(context).textTheme.labelLarge,
               ),
             ],
           ),
@@ -63,8 +61,8 @@ class _Content extends StatelessWidget {
             children: viewModel.items.map((item) {
               return Text(item);
             }
-            ).toList()
-        )
+            ).toList(),
+        ),
       ],
     );
   }

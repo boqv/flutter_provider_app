@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:provider_app/features/root/root_navigation_state.dart';
 
-import '../../routing/routes.dart';
+import 'package:provider_app/routing/routes.dart';
 
 class RootScreen extends StatelessWidget {
   final Widget child;
@@ -43,8 +41,6 @@ class _BottomNavigationState extends State<_BottomNavigation> {
   @override
   Widget build(BuildContext context) {
 
-    var navigationState = context.watch<RootNavigationState>();
-
     return BottomNavigationBar(
       items: const<BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -58,17 +54,31 @@ class _BottomNavigationState extends State<_BottomNavigation> {
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',
-        )
+        ),
       ],
-      currentIndex: navigationState.currentIndex,
+      currentIndex: _selectedIndex(context),
       onTap: (index) {
-        navigationState.setCurrentIndex(index);
         _navigate(context, index);
       },
       backgroundColor: Theme.of(context).colorScheme.primary,
       unselectedItemColor: Theme.of(context).colorScheme.onPrimary,
       selectedItemColor: Colors.yellow,
     );
+  }
+
+  int _selectedIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).uri.toString();
+
+    if (location.startsWith(AppRoute.home)) {
+      return 0;
+    }
+    if (location.startsWith(AppRoute.news)) {
+      return 1;
+    }
+    if (location.startsWith(AppRoute.tools)) {
+      return 2;
+    }
+    return 0;
   }
 
   void _navigate(BuildContext context, int index) {
@@ -81,6 +91,7 @@ class _BottomNavigationState extends State<_BottomNavigation> {
   }
 }
 
+/*
 class _Drawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -96,10 +107,10 @@ class _Drawer extends StatelessWidget {
                 children: [
                   Text(
                       'Hello!',
-                      style: Theme.of(context).textTheme.titleMedium
-                  )
+                      style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ],
-              )
+              ),
           ),
           ListTile(
             title: const Text('Item 1'),
@@ -126,3 +137,4 @@ class _Drawer extends StatelessWidget {
     );
   }
 }
+*/

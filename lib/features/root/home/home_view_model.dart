@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
-
-import '../../../network/items_service.dart';
-import '../../../network/network_client/network_client_exceptions.dart';
-import '../../../user_session/user_session.dart';
-import '../../shared/error_dialog.dart';
+import 'package:provider_app/features/shared/error_dialog.dart';
+import 'package:provider_app/network/items_service.dart';
+import 'package:provider_app/network/network_client/network_client_exceptions.dart';
+import 'package:provider_app/user_session/user_session.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  final UserSession _userSession;
-  final ItemsService _itemsService;
+  final UserSessionType _userSession;
+  final ItemsServiceType _itemsService;
 
   HomeViewModel(this._userSession, this._itemsService) {
     getItems();
@@ -31,14 +30,13 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> getItems() async {
     try {
-      var response = await _itemsService.getItems();
+      final response = await _itemsService.getItems();
       _items = response.items;
       notifyListeners();
     } catch (exception) {
       switch (exception.runtimeType) {
-        case NetworkClientUnauthorizedException:
+        case const (NetworkClientUnauthorizedException):
           _userSession.sessionExpired();
-          break;
 
         default:
           _error = ViewError("Error!", "Something unexpected happened!");
@@ -58,7 +56,14 @@ class ItemsResponse {
   const ItemsResponse({ required this.items });
 
   factory ItemsResponse.fromJson(Map<String, dynamic> json) {
-    var items = List<String>.from(json['items']);
+    final items = (json['items'] as List<dynamic>)
+        .map((item) => item.toString())
+        .toList();
     return ItemsResponse(items: items);
   }
+}
+
+class ItemsResponseListItem {
+  const ItemsResponseListItem({ required this.title});
+  final String title;
 }

@@ -11,27 +11,26 @@ class SecureStorage implements SecureStorageType {
 
   final FlutterSecureStorage storage;
 
-  final AndroidOptions _aOptions = const AndroidOptions(
+  AndroidOptions get _aOptions => const AndroidOptions(
     encryptedSharedPreferences: true,
   );
 
-  final IOSOptions iOptions = const IOSOptions(
+  IOSOptions get _iOptions => const IOSOptions(
       accessibility: KeychainAccessibility.first_unlock
   );
 
   @override
   Future<void> set(String key, String value) async {
-    const iOptions = IOSOptions(accessibility: KeychainAccessibility.first_unlock);
-    await storage.write(key: key, value: value, iOptions: iOptions, aOptions: _aOptions);
+    await storage.write(key: key, value: value, iOptions: _iOptions, aOptions: _aOptions);
   }
 
   @override
   Future<String?> get(String key) async {
-    return await storage.read(key: key, iOptions: iOptions, aOptions: _aOptions);
+    return await storage.read(key: key, iOptions: _iOptions, aOptions: _aOptions);
   }
 
   @override
   Future<void> delete(String key) async {
-    await storage.delete(key: key);
+    await storage.delete(key: key, iOptions: _iOptions, aOptions: _aOptions);
   }
 }

@@ -1,7 +1,7 @@
 class AppRoute {
-  static String login = '/login';
-  static String expired = '/expired';
-  static String home = '/home';
-  static String news = '/news';
-  static String tools = '/tools';
+  static const String login = '/login';
+  static const String expired = '/expired';
+  static const String home = '/home';
+  static const String news = '/news';
+  static const String tools = '/tools';
 }
